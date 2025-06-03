@@ -59,9 +59,9 @@ make
 #### macOS Build
 On macOS, ALSA support should be disabled and library paths may need fixing:
 
-- Option 1. Use the acarsdec macOS tool installer [script](https://github.com/lukeswitz/acarsdec/blob/master/install-macOS-acarstools.sh) in this repo
+- Option 1. Use the macOS installer [script](https://github.com/lukeswitz/acarsdec/blob/master/install-macOS-acarstools.sh) in this repo to install acarsdec and its dependencies.
 
-- Option 2. Follow the below instructions
+- Option 2. Follow the below instructions to build from source
 
 ```
 # Install dependencies via Homebrew
