@@ -34,22 +34,21 @@ See LICENSE.md for details
 ## Compilation
 
 ### Dependencies
-
 acarsdec requires CMake, pkg-config and a C compiler.
-
-It depends on some optional external libraries :
+It depends on some optional external libraries:
  * librtlsdr for RTL-based SDR input (http://sdr.osmocom.org/trac/wiki/rtl-sdr)
  * libsoapysdr for SoapySDR input (https://github.com/pothosware/SoapySDR)
  * libairspy for airspy SDR input (https://github.com/airspy/airspyone_host)
  * libmirsdrapi-rsp for sdrplay software radio input
  * libsndfile for audio input (https://github.com/libsndfile/libsndfile)
- * libasound for ALSA input (https://github.com/alsa-project/alsa-lib)
+ * libasound for ALSA input (https://github.com/alsa-project/alsa-lib) *(Linux only)*
  * libacars for decoding ATS applications (https://github.com/szpajder/libacars)
  * libcjson for JSON output support (https://github.com/DaveGamble/cJSON)
  * paho-mqtt3a (and libcjson) for MQTT output support (https://github.com/eclipse/paho.mqtt.c)
 
 ### Building
 
+#### Standard Linux Build
 ```
 mkdir build
 cd build
@@ -57,28 +56,43 @@ cmake .. -DCMAKE_C_FLAGS="-march=native"
 make
 ```
 
-All optional libraries will be autodected, a summary of what is enabled will be printed by cmake.
+#### macOS Build
+On macOS, ALSA support should be disabled and library paths may need fixing:
 
+```
+# Install dependencies via Homebrew
+brew install libsndfile cjson paho-mqtt-c librtlsdr soapysdr airspy pkg-config
+
+# Build with ALSA disabled
+mkdir build
+cd build
+cmake .. -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_C_FLAGS="-march=native"
+
+# If build fails due to ALSA, disable it in CMakeLists.txt:
+sed -i '' '36,46s/^/#/' ../CMakeLists.txt
+
+make
+```
+
+All optional libraries will be autodetected, a summary of what is enabled will be printed by cmake.
 The `-DCMAKE_C_FLAGS="-march=native"` argument to cmake will produce an `acarsdec` executable
 that is optimized for the machine it was built on (and may not run correctly on other devices).
-It can be ommitted for a platform-generic build (with possibly reduced performance).
- 
+It can be omitted for a platform-generic build (with possibly reduced performance).
+
 #### Raspberry Pi builds
-
 It seems that the compile option `-march=native` may be problematic on Raspberry Pi.
-
 In that case, one can use the following cmake parameter instead in the above procedure:
-
  * for PI 2B : `-DCMAKE_C_FLAGS="-mcpu=cortex-a7 -mfpu=neon-vfpv4"`
  * for PI 3B : `-DCMAKE_C_FLAGS="-mcpu=cortex-a53 -mfpu=neon-fp-armv8"`
  * for PI 4B : `-DCMAKE_C_FLAGS="-mcpu=cortex-a72 -mfpu=neon-fp-armv8"`
 
 ### Installing
-
 ```
 sudo make install
-```
 
+# Fix library paths on macOS (if needed)
+sudo install_name_tool -change @rpath/libacars-2.2.dylib /usr/local/lib/libacars-2.2.dylib /usr/local/bin/acarsdec
+```
 ## Usage
 
 acarsdec operation can be controlled via multiple command line parameters
