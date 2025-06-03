@@ -59,6 +59,10 @@ make
 #### macOS Build
 On macOS, ALSA support should be disabled and library paths may need fixing:
 
+- Option 1. Use the acarsdec macOS tool installer [script](https://github.com/lukeswitz/acarsdec/blob/master/install-macOS-acarstools.sh) in this repo
+
+- Option 2. Follow the below instructions
+
 ```
 # Install dependencies via Homebrew
 brew install libsndfile cjson paho-mqtt-c librtlsdr soapysdr airspy pkg-config
@@ -98,6 +102,13 @@ sudo install_name_tool -change @rpath/libacars-2.2.dylib /usr/local/lib/libacars
 acarsdec operation can be controlled via multiple command line parameters
 (the availability of which depends on which optional libraries have been enabled at build time),
 they are detailed below:
+
+| Device        | Max Bandwidth | Example Frequencies to Use Together                | Example Command                                                                                                                                                                                                                      |
+|---------------|--------------|----------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| RTL-SDR       | ~2.4 MHz     | 131.525 131.550 131.725 131.825 131.850            | `acarsdec -e --output full:file:path=acars_rtlsdr.log,rotate=daily --rtlsdr 0 131.525 131.550 131.725 131.825 131.850`                                                                        |
+| Airspy Mini   | ~3 MHz       | 131.525 131.550 131.725 131.825 131.850            | `acarsdec -e --output full:file:path=acars_airspy.log,rotate=daily --soapysdr driver=airspy 131.525 131.550 131.725 131.825 131.850`                                                          |
+| SDRplay       | 6–8 MHz      | 131.125 131.450 131.475 131.525 131.550 131.725 131.825 131.850 | `acarsdec -e --output full:file:path=acars_sdrplay.log,rotate=daily --soapysdr driver=sdrplay,agc_setpoint=-15 131.125 131.450 131.475 131.525 131.550 131.725 131.825 131.850`                |
+| LimeSDR       | 10+ MHz      | 129.125 129.450 130.025 130.425 130.450 130.650 131.125 131.450 131.475 131.525 131.550 131.725 131.825 131.850 | `acarsdec -e --output full:file:path=acars_lime.log,rotate=daily --soapysdr driver=lime 129.125 129.450 130.025 130.425 130.450 130.650 131.125 131.450 131.475 131.525 131.550 131.725 131.825 131.850` |
 
 ### Common options
 
