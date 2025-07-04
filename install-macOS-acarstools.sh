@@ -61,7 +61,7 @@ log_info "Installing dependencies via Homebrew..."
 BREW_DEPS=(
     "libsndfile"      # Audio file support
     "cjson"           # JSON output support
-    "paho-mqtt-c"     # MQTT output support
+    "libpaho-mqtt"    # MQTT output support
     "librtlsdr"       # RTL-SDR support
     "soapysdr"        # Universal SDR support
     "airspy"          # Airspy SDR support
